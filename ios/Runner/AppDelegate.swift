@@ -1,5 +1,7 @@
 import UIKit
 import Flutter
+import GoogleMaps
+
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -9,7 +11,7 @@ import Flutter
   ) -> Bool {
     var flutter_native_splash = 1
     UIApplication.shared.isStatusBarHidden = false
-
+    GMSServices.provideAPIKey("AIzaSyAtuQ9DbGTfz81j288BkUGRsNxrKu7zSuo")
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
