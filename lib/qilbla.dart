@@ -5,7 +5,7 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class QiblaPage extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _QiblaState extends State<QiblaPage> {
   double _result;
   String _qDirection;
   int _degree;
-  ProgressDialog _progressDialog;
+  bool _isLocationFetchingDone = true;
 
   Completer<GoogleMapController> _controller = Completer();
   static final CameraPosition _initialCamera = CameraPosition(
@@ -113,6 +113,9 @@ class _QiblaState extends State<QiblaPage> {
 
     _result = (radToDeg(math.atan2(y, x)) + 360) % 360;
     _degree = _result.toInt();
+    setState(() {
+      _isLocationFetchingDone = false;
+    });
   }
 
   String getDirectionString(double degree) {
@@ -130,13 +133,6 @@ class _QiblaState extends State<QiblaPage> {
     return where;
   }
 
-  void _initProgressDialog(BuildContext context) {
-    _progressDialog =
-        new ProgressDialog(context, type: ProgressDialogType.Normal);
-
-    _progressDialog.style(message: 'Showing some progress...');
-  }
-
   @override
   void initState() {
     super.initState();
@@ -149,70 +145,70 @@ class _QiblaState extends State<QiblaPage> {
 
   @override
   void didChangeDependencies() async {
-    _progressDialog.show();
     await calculateQiblaAngle();
     _qDirection = getDirectionString(_result);
-    _progressDialog.dismiss();
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    _initProgressDialog(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           backgroundColor: Colors.grey[300],
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: Container(
-                  margin: EdgeInsetsDirectional.only(top: 40.0),
-                  width: 300.0,
-                  height: 300.0,
-                  color: Colors.grey[300],
-                  child: Transform.rotate(
-                    angle: ((_direction ?? 0) * (math.pi / 180) * -1),
-                    child: Container(
-                        child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: Container(
-                            width: 190.0,
-                            height: 190.0,
-                            child: Image.asset('assets/dial.png'),
+          body: ModalProgressHUD(
+            inAsyncCall: _isLocationFetchingDone,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Align(
+                  alignment: AlignmentDirectional.topCenter,
+                  child: Container(
+                    margin: EdgeInsetsDirectional.only(top: 40.0),
+                    width: 300.0,
+                    height: 300.0,
+                    color: Colors.grey[300],
+                    child: Transform.rotate(
+                      angle: ((_direction ?? 0) * (math.pi / 180) * -1),
+                      child: Container(
+                          child: Stack(
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              width: 190.0,
+                              height: 190.0,
+                              child: Image.asset('assets/dial.png'),
+                            ),
                           ),
-                        ),
-                        Container(
-                            width: 300.0,
-                            height: 300.0,
-                            child: Transform.rotate(
-                              angle: _result == null ? 0 : degToRad(_result),
-                              child: Image.asset('assets/qibla.png'),
-                            )),
-                      ],
-                    )),
+                          Container(
+                              width: 300.0,
+                              height: 300.0,
+                              child: Transform.rotate(
+                                angle: _result == null ? 0 : degToRad(_result),
+                                child: Image.asset('assets/qibla.png'),
+                              )),
+                        ],
+                      )),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsetsDirectional.only(top: 30.0),
-                child: Text(
-                  _result == null ? '0' : '$_degree' + '° $_qDirection',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.white),
+                Container(
+                  margin: EdgeInsetsDirectional.only(top: 30.0),
+                  child: Text(
+                    _result == null ? '0' : '$_degree' + '° $_qDirection',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.white),
+                  ),
                 ),
-              ),
-              Align(
-                child: Container(
-                    margin: EdgeInsetsDirectional.only(top: 10.0),
-                    child: Image.asset('assets/footer.png')),
-              )
-            ],
+                Align(
+                  child: Container(
+                      margin: EdgeInsetsDirectional.only(top: 10.0),
+                      child: Image.asset('assets/footer.png')),
+                )
+              ],
+            ),
           )),
     );
   }

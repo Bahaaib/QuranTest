@@ -43,7 +43,7 @@ dependencies:
   flutter_compass: ^0.3.4
   location: ^2.3.5
   google_maps_flutter: ^0.5.4
-  progress_dialog: ^1.2.0
+  modal_progress_hud: ^0.1.3
 
 
 
