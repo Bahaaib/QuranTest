@@ -79,6 +79,9 @@ flutter:
    - assets/QuranV2.sqlite
    - assets/QuranData.sqlite
    - assets/images/
+   - assets/books/azkar/
+   - assets/books/tafseer/
+   - assets/books/ryad/
    - assets/compass.png
    - assets/footer.png
    - assets/dial.png

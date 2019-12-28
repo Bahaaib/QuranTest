@@ -687,6 +687,8 @@ class _QuranShowState extends State<QuranShow>
           return AlertDialog(
             contentPadding: EdgeInsets.all(5),
             content: Container(
+              width: 300.0,
+              height: 300.0,
               child: ListView.builder(
                   itemCount: ayat.length,
                   itemBuilder: (_, position) {
@@ -733,6 +735,8 @@ class _QuranShowState extends State<QuranShow>
           return AlertDialog(
             contentPadding: EdgeInsets.all(5),
             content: Container(
+              width: 300.0,
+              height: 300.0,
               child: ListView.builder(
                   itemCount: ayat.length,
                   itemBuilder: (_, position) {

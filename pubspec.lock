@@ -258,7 +258,7 @@ packages:
       name: flutter_webview_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.10"
+    version: "0.3.10+1"
   front_end:
     dependency: transitive
     description:
@@ -307,7 +307,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.0+3"
   http_multi_server:
     dependency: transitive
     description:
@@ -648,7 +648,7 @@ packages:
       name: states_rebuilder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0+1"
+    version: "1.9.0"
   stream_channel:
     dependency: transitive
     description:
